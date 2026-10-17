@@ -75,6 +75,8 @@ tfoot td{font-weight:700;border-bottom:0}
 .ok{color:var(--green)}
 .kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
 .kv:last-child{border-bottom:0}
+.monthpick{font:inherit;font-size:26px;font-weight:700;color:#fff;background:transparent;border:0;border-bottom:1px dashed rgba(255,255,255,.45);padding:2px 22px 2px 0;max-width:100%;cursor:pointer;appearance:auto}
+.monthpick option{color:#14294d;font-size:16px}
 </style>
 </head>
 <body>
@@ -108,7 +110,7 @@ tfoot td{font-weight:700;border-bottom:0}
         </div>
         <hr style="border:0;border-top:1px solid rgba(255,255,255,.18);margin:16px 0">
         <div class="muted" style="font-size:14px" data-i18n="curMonth">Current month</div>
-        <div class="big" id="monthLabel">—</div>
+        <select id="monthPick" class="monthpick" aria-label="Month"></select>
         <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap">
           <span class="muted" style="font-size:13px" id="pubLabel"></span>
           <button class="btn ghost" id="refresh" type="button">↻ <span data-i18n="refresh">Refresh</span></button>
@@ -155,6 +157,7 @@ tfoot td{font-weight:700;border-bottom:0}
         <button data-f="owing" class="on" type="button" data-i18n="owingOnly">Owing</button>
         <button data-f="all" type="button" data-i18n="allCust">All</button>
       </div></div>
+      <div class="note" id="custNote"></div>
       <div class="card list" id="custList"></div>
     </section>
 
@@ -232,7 +235,7 @@ const I18N = {
     wrongPw:'Wrong password. Please try again.', noData:'The sales data could not be loaded. Please try again later.', noCrypto:'Please open this page over a secure connection (https) or in a modern browser.',
     curMonth:'Current month', refresh:'Refresh', todaySales:"Today's sales", salesToday:'Sales recorded today', viewDaily:'View daily sales',
     curStock:'Current stock', itemsLeft:'Pieces remaining', stSold:'Stock sold', thisMonth:'This month', owing:'Customers owing', tapCust:'Tap to view customers',
-    unpaid:'Total unpaid', outstanding:'Outstanding credit', dailySales:'Daily sales', chartNote:'Pieces sold per day this month.', noDaily:'No sales recorded yet.',
+    unpaid:'Total unpaid', balanceAt:'Balances at end of', outstanding:'Outstanding credit', dailySales:'Daily sales', chartNote:'Pieces sold per day this month.', noDaily:'No sales recorded yet.',
     overview:'Business overview', profit:'Business profit', perfect:'Perfect profit', save:'Save', saved:'Saved', phoneNote:'Saved on this device only. Parents will see a phone only on the device where it was typed.', totalSales:'Total sales', paid:'Paid', home:'Home', customers:'Customers', stock:'Stock', settings:'Settings',
     search:'Search name or phone', searchPh:'Search name or phone', owingOnly:'Owing', allCust:'All', owes:'Owes', clear:'Paid', noPhone:'No phone yet',
     balance:'Balance owed', purchases:'Purchases', payments:'Payments', phone:'Phone', date:'Date', qty:'Qty', price:'Unit price', total:'Total', amount:'Amount', method:'Method',
@@ -246,7 +249,7 @@ const I18N = {
     wrongPw:'የይለፍ ቃሉ ትክክል አይደለም። እባክዎ እንደገና ይሞክሩ።', noData:'የሽያጭ መረጃው ሊጫን አልቻለም። ቆይተው እንደገና ይሞክሩ።', noCrypto:'እባክዎ ይህን ገጽ በደህንነቱ የተጠበቀ ግንኙነት (https) ወይም ዘመናዊ አሳሽ ይክፈቱ።',
     curMonth:'የአሁኑ ወር', refresh:'አድስ', todaySales:'የዛሬ ሽያጭ', salesToday:'ዛሬ የተመዘገበ ሽያጭ', viewDaily:'የዕለታዊ ሽያጭ ይመልከቱ',
     curStock:'አሁን ያለ ክምችት', itemsLeft:'ቀሪ ቁራጭ', stSold:'የተሸጠ ክምችት', thisMonth:'በዚህ ወር', owing:'ዕዳ ያለባቸው ደንበኞች', tapCust:'ደንበኞችን ለማየት ይንኩ',
-    unpaid:'ያልተከፈለ ጠቅላላ', outstanding:'ያልተከፈለ ብድር', dailySales:'ዕለታዊ ሽያጭ', chartNote:'በዚህ ወር በየቀኑ የተሸጡ ቁራጮች።', noDaily:'እስካሁን ሽያጭ አልተመዘገበም።',
+    unpaid:'ያልተከፈለ ጠቅላላ', balanceAt:'ቀሪ ሂሳብ በ', outstanding:'ያልተከፈለ ብድር', dailySales:'ዕለታዊ ሽያጭ', chartNote:'በዚህ ወር በየቀኑ የተሸጡ ቁራጮች።', noDaily:'እስካሁን ሽያጭ አልተመዘገበም።',
     overview:'የንግድ ማጠቃለያ', profit:'የንግድ ትርፍ', perfect:'ፍጹም ትርፍ', save:'አስቀምጥ', saved:'ተቀምጧል', phoneNote:'በዚህ መሣሪያ ላይ ብቻ ይቀመጣል። ወላጆች ስልኩን የሚያዩት በዚያ መሣሪያ ብቻ ነው።', totalSales:'ጠቅላላ ሽያጭ', paid:'የተከፈለ', home:'መነሻ', customers:'ደንበኞች', stock:'ክምችት', settings:'ቅንብሮች',
     search:'ስም ወይም ስልክ ፈልግ', searchPh:'ስም ወይም ስልክ ፈልግ', owingOnly:'ዕዳ ያለባቸው', allCust:'ሁሉም', owes:'ዕዳ አለበት', clear:'ከፍሏል', noPhone:'ስልክ አልተመዘገበም',
     balance:'ያለበት ዕዳ', purchases:'ግዢዎች', payments:'ክፍያዎች', phone:'ስልክ', date:'ቀን', qty:'ብዛት', price:'የአንድ ዋጋ', total:'ጠቅላላ', amount:'መጠን', method:'የክፍያ መንገድ',
@@ -336,7 +339,7 @@ function renderAll() {
 }
 function renderHome() {
   const m = DATA.meta, T = DATA.totals;
-  $('monthLabel').textContent = monthName(m.month_no) + ' ' + m.year;
+  populateMonthPicker();
   $('pubLabel').textContent = t('exported') + ': ' + (m.exported || '—');
   const today = ethKey(new Date());
   const row = DATA.daily.find(d => d.date === today);
@@ -373,6 +376,7 @@ function setPhone(c, v) {
 }
 function initials(name) { return (name || '?').trim().charAt(0).toUpperCase(); }
 function renderCustomers() {
+  $('custNote').textContent = t('balanceAt') + ' ' + monthName(DATA.meta.month_no) + ' ' + DATA.meta.year;
   const q = ($('q').value || '').trim().toLowerCase();
   const list = DATA.customers
     .filter(c => (filter === 'all' || c.balance > 0))
@@ -466,6 +470,32 @@ document.querySelectorAll('#filt button').forEach(b => b.addEventListener('click
   renderCustomers();
 }));
 
+/* ---- Months (bundle may hold several months) ---- */
+let BUNDLE_MONTHS = [];
+function normalizeBundle(b) {
+  let list = null;
+  if (b && Array.isArray(b.months)) list = b.months;
+  else if (b && b.meta && b.customers) list = [b];
+  if (!list || !list.length) throw new Error('bad-bundle');
+  return list.slice().sort((x, y) => (x.meta.year - y.meta.year) || (x.meta.month_no - y.meta.month_no));
+}
+function populateMonthPicker() {
+  const sel = $('monthPick');
+  if (!sel || !BUNDLE_MONTHS.length) return;
+  sel.innerHTML = '';
+  BUNDLE_MONTHS.forEach((m, i) => {
+    const o = document.createElement('option');
+    o.value = String(i); o.textContent = monthName(m.meta.month_no) + ' ' + m.meta.year;
+    sel.appendChild(o);
+  });
+  sel.value = String(BUNDLE_MONTHS.indexOf(DATA));
+}
+$('monthPick').addEventListener('change', e => {
+  DATA = BUNDLE_MONTHS[Number(e.target.value)];
+  closeDetail();
+  renderAll();
+});
+
 /* ---- Gate ---- */
 $('pwform').addEventListener('submit', async e => {
   e.preventDefault();
@@ -475,7 +505,9 @@ $('pwform').addEventListener('submit', async e => {
   let blob;
   try { blob = await getBlob(); } catch (x) { err.textContent = t('noData'); btn.disabled = false; return; }
   try {
-    DATA = await decryptBlob(blob, pw);
+    const bundle = await decryptBlob(blob, pw);
+    BUNDLE_MONTHS = normalizeBundle(bundle);
+    DATA = BUNDLE_MONTHS[BUNDLE_MONTHS.length - 1];
     $('gate').hidden = true; $('app').hidden = false;
     go('home'); applyI18n(); renderAll();
   } catch (x) {
