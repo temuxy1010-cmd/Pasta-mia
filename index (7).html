@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#14294d">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Pasta Mia">
+<title>Pasta Mia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#14294d;--blue:#3a78c2;--blue-l:#e6eef9;--green:#2e7d4f;--green-l:#e5f4ea;--amber:#b26a00;--amber-l:#fdf1df;--red:#b3261e;--bg:#f2f5fa;--card:#ffffff;--ink:#14294d;--muted:#6b7a90;--line:#e3e9f2;--r:18px}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Noto Sans Ethiopic',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;background-color:var(--bg)}
+[hidden]{display:none!important}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px 120px}
+.card{background:var(--card);border-radius:var(--r);padding:16px;box-shadow:0 1px 2px rgba(20,41,77,.06),0 4px 14px rgba(20,41,77,.05)}
+.hero{background:var(--navy);color:#fff;border-radius:var(--r);padding:18px}
+.muted{color:#b9c7dd}
+.big{font-size:30px;font-weight:700;letter-spacing:-.2px;line-height:1.2;overflow-wrap:anywhere}
+.label{font-size:14px;color:var(--muted);line-height:1.4}
+.caps{font-size:13px;letter-spacing:.6px;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.stat{text-align:left;font:inherit;color:inherit;border:0;width:100%}
+.stat .big{font-size:24px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pill.g{background:var(--green-l);color:var(--green)}
+.pill.a{background:var(--amber-l);color:var(--amber)}
+.pill.b{background:var(--blue-l);color:var(--blue)}
+.btn{font:inherit;border:0;border-radius:12px;padding:12px 14px;background:var(--blue-l);color:var(--navy);font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%}
+.btn.primary{background:var(--blue);color:#fff;justify-content:center}
+.btn.ghost{background:rgba(255,255,255,.12);color:#fff;width:auto;padding:8px 12px}
+.btn.small{width:auto;padding:8px 12px}
+.section-title{font-size:16px;font-weight:700;margin:22px 4px 10px}
+.list{padding:4px 16px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);width:100%;background:none;border-top:0;border-left:0;border-right:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.row:last-child{border-bottom:0}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--blue-l);color:var(--navy);display:grid;place-items:center;font-weight:700;flex:none}
+.name{font-weight:600;overflow-wrap:anywhere}
+.right{text-align:right;flex:none}
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:12px;width:calc(100% - 24px);max-width:528px;background:var(--navy);border-radius:22px;display:grid;grid-template-columns:repeat(4,1fr);padding:8px 6px;box-shadow:0 10px 30px rgba(20,41,77,.3);z-index:5}
+.tabbar button{font:inherit;background:none;border:0;color:#aebfd8;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;cursor:pointer;padding:6px 2px;border-radius:14px}
+.tabbar button.on{color:#fff;background:rgba(255,255,255,.08)}
+.tabbar svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+input[type=search],input[type=password]{width:100%;font:inherit;font-size:16px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+.seg{display:inline-flex;background:var(--line);border-radius:999px;padding:3px;gap:2px}
+.seg button{font:inherit;border:0;background:none;padding:6px 12px;border-radius:999px;cursor:pointer;color:var(--muted);font-weight:600}
+.seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:9px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12px}
+td.num,th.num{text-align:right;white-space:nowrap}
+tfoot td{font-weight:700;border-bottom:0}
+.overlay{position:fixed;inset:0;background:var(--bg);z-index:10;overflow:auto}
+.gate{min-height:100vh;display:grid;place-items:center;padding:24px}
+.gate .card{width:100%;max-width:380px}
+.err{color:var(--red);font-size:14px;min-height:22px;margin-top:10px}
+.bars{display:flex;align-items:flex-end;gap:5px;height:190px;margin-top:12px;border-bottom:1px solid var(--line)}
+.bar{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px}
+.bar b{font-size:10px;font-weight:600;color:var(--ink)}
+.bar i{display:block;width:100%;background:var(--blue);border-radius:6px 6px 2px 2px;min-height:3px}
+.bar.today i{background:var(--green)}
+.bar span{font-size:10px;color:var(--muted);margin-bottom:2px}
+.note{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.5}
+.hdr{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:4px 2px 14px}
+.hdr h1{font-size:24px;margin:0}
+.empty{color:var(--muted);font-size:14px;padding:14px 0}
+.due{color:var(--amber)}
+.ok{color:var(--green)}
+.kv{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.kv:last-child{border-bottom:0}
+.monthpick{font:inherit;font-size:26px;font-weight:700;color:#fff;background:transparent;border:0;border-bottom:1px dashed rgba(255,255,255,.45);padding:2px 22px 2px 0;max-width:100%;cursor:pointer;appearance:auto}
+.monthpick option{color:#14294d;font-size:16px}
+</style>
+</head>
+<body>
+
+<div id="gate" class="gate">
+  <div class="card">
+    <div class="big" style="font-size:22px" data-i18n="biz">Business Dashboard</div>
+    <p class="label" style="margin:8px 0 14px" data-i18n="enterPw">Enter the family password to view the dashboard.</p>
+    <form id="pwform" autocomplete="on">
+      <input id="pw" type="password" autocomplete="current-password" data-i18n-ph="pwPh" placeholder="Password">
+      <button class="btn primary" type="submit" style="margin-top:12px" id="openBtn" data-i18n="enter">Open</button>
+    </form>
+    <div id="err" class="err" role="alert"></div>
+  </div>
+</div>
+
+<div id="app" hidden>
+  <div class="wrap">
+
+    <!-- HOME -->
+    <section id="v-home">
+      <div class="hero">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+          <div>
+            <div class="big" style="font-size:22px" data-i18n="biz">Business Dashboard</div>
+            <div class="muted" style="font-size:14px" data-i18n="bizSub">Sales overview</div>
+          </div>
+          <div class="seg" data-langseg>
+            <button data-lang="en">EN</button><button data-lang="am">አማ</button>
+          </div>
+        </div>
+        <hr style="border:0;border-top:1px solid rgba(255,255,255,.18);margin:16px 0">
+        <div class="muted" style="font-size:14px" data-i18n="curMonth">Current month</div>
+        <select id="monthPick" class="monthpick" aria-label="Month"></select>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <span class="muted" style="font-size:13px" id="pubLabel"></span>
+          <button class="btn ghost" id="refresh" type="button">↻ <span data-i18n="refresh">Refresh</span></button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <div class="caps" data-i18n="todaySales">Today's sales</div>
+        <div class="big" id="todayAmt" style="margin-top:6px">0.00 ETB</div>
+        <div class="label" style="margin-top:4px" data-i18n="salesToday">Sales recorded today</div>
+        <button class="btn" style="margin-top:14px" id="goDaily" type="button"><span data-i18n="viewDaily">View daily sales</span><span>›</span></button>
+      </div>
+
+      <div class="grid2">
+        <div class="card"><div class="label" data-i18n="curStock">Current stock</div><div class="big" style="font-size:24px" id="stCur">—</div><div class="label" data-i18n="itemsLeft">Pieces remaining</div></div>
+        <div class="card"><div class="label" data-i18n="stSold">Stock sold</div><div class="big" style="font-size:24px" id="stSold">—</div><div class="label" data-i18n="thisMonth">This month</div></div>
+        <button class="card stat" id="owingCard" type="button"><div class="label" data-i18n="owing">Customers owing</div><div class="big" style="font-size:24px" id="owingN">—</div><div class="label" data-i18n="tapCust">Tap to view customers</div></button>
+        <div class="card"><div class="label" data-i18n="unpaid">Total unpaid</div><div class="big" style="font-size:24px" id="unpaidAmt">—</div><div class="label" data-i18n="outstanding">Outstanding credit</div></div>
+      </div>
+
+      <div class="card" style="margin-top:12px" id="dailyCard">
+        <div class="section-title" style="margin:0" data-i18n="dailySales">Daily sales</div>
+        <div class="label" id="chartSub" style="margin-top:4px"></div>
+        <div class="bars" id="bars"></div>
+        <div class="note" data-i18n="chartNote">Pieces sold per day this month.</div>
+      </div>
+
+      <div class="section-title" data-i18n="overview">Business overview</div>
+      <div class="card list">
+        <div class="row" style="cursor:default">
+          <div><div class="label" data-i18n="perfect">Perfect profit</div><div class="big" style="font-size:22px" id="profitAmt">—</div></div>
+        </div>
+        <div class="row" style="cursor:default">
+          <div><div class="label" data-i18n="totalSales">Total sales</div><div class="big" style="font-size:22px" id="salesAmt">—</div><div class="label" id="paidLbl"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CUSTOMERS -->
+    <section id="v-cust" hidden>
+      <div class="hdr"><h1 data-i18n="customers">Customers</h1></div>
+      <input type="search" id="q" data-i18n-ph="search" placeholder="Search name or phone">
+      <div style="margin:12px 0"><div class="seg" id="filt">
+        <button data-f="owing" class="on" type="button" data-i18n="owingOnly">Owing</button>
+        <button data-f="all" type="button" data-i18n="allCust">All</button>
+      </div></div>
+      <div class="note" id="custNote"></div>
+      <div class="card list" id="custList"></div>
+    </section>
+
+    <!-- STOCK -->
+    <section id="v-stock" hidden>
+      <div class="hdr"><h1 data-i18n="stock">Stock</h1></div>
+      <div class="grid2" style="margin-top:0">
+        <div class="card"><div class="label" data-i18n="opening">Opening stock</div><div class="big" style="font-size:24px" id="sOpen">—</div></div>
+        <div class="card"><div class="label" data-i18n="added">Stock added</div><div class="big" style="font-size:24px" id="sAdded">—</div></div>
+        <div class="card"><div class="label" data-i18n="sold">Stock sold</div><div class="big" style="font-size:24px" id="sSold">—</div></div>
+        <div class="card"><div class="label" data-i18n="current">Current stock</div><div class="big" style="font-size:24px" id="sCur">—</div></div>
+      </div>
+      <div class="section-title" data-i18n="queue">Stock additions</div>
+      <div class="card" style="overflow-x:auto"><table id="queueTbl"></table></div>
+      <div class="note" data-i18n="stockNote">Figures follow your Excel Counter sheet.</div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="v-set" hidden>
+      <div class="hdr"><h1 data-i18n="settings">Settings</h1></div>
+      <div class="card">
+        <div class="caps" data-i18n="language">Language</div>
+        <div class="seg" data-langseg style="margin-top:10px"><button data-lang="en">English</button><button data-lang="am">አማርኛ</button></div>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <div class="kv"><span class="label" data-i18n="period">Period</span><span id="setPeriod">—</span></div>
+        <div class="kv"><span class="label" data-i18n="product">Product</span><span id="setProduct">—</span></div>
+        <div class="kv"><span class="label" data-i18n="calendar">Calendar</span><span data-i18n="ethCal">Ethiopian</span></div>
+        <div class="kv"><span class="label" data-i18n="exported">Last updated</span><span id="setExp">—</span></div>
+      </div>
+      <div style="margin-top:12px"><button class="btn" id="lockBtn" type="button" data-i18n="lock">Lock dashboard</button></div>
+    </section>
+  </div>
+
+  <nav class="tabbar" aria-label="Main">
+    <button data-go="home" class="on" type="button">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      <span data-i18n="home">Home</span></button>
+    <button data-go="cust" type="button">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.4 3.2-5.5 6.5-5.5s5.9 2.1 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 14.8c1.8.9 2.8 2.8 3 5.2"/></svg>
+      <span data-i18n="customers">Customers</span></button>
+    <button data-go="stock" type="button">
+      <svg viewBox="0 0 24 24"><path d="M12 2.5 21 7v10l-9 4.5L3 17V7z"/><path d="M3 7l9 4.5L21 7M12 11.5V21.5"/></svg>
+      <span data-i18n="stock">Stock</span></button>
+    <button data-go="set" type="button">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      <span data-i18n="settings">Settings</span></button>
+  </nav>
+
+  <!-- CUSTOMER DETAIL -->
+  <div id="detail" class="overlay" hidden>
+    <div class="wrap">
+      <div class="hdr"><button class="btn small" id="back" type="button">‹ <span data-i18n="back">Back</span></button></div>
+      <div class="card">
+        <div class="big" style="font-size:24px" id="dName"></div>
+        <div style="display:flex;gap:8px;margin-top:12px"><input type="tel" id="phoneIn" inputmode="tel" placeholder="09..." style="flex:1"><button class="btn small" id="phoneSave" type="button" data-i18n="save">Save</button></div><div class="note" id="phoneMsg" data-i18n="phoneNote"></div>
+        <div class="caps" style="margin-top:14px" data-i18n="balance">Balance owed</div>
+        <div class="big" id="dBal"></div>
+      </div>
+      <div class="section-title" data-i18n="purchases">Purchases</div>
+      <div class="card" style="overflow-x:auto"><table id="dPur"></table></div>
+      <div class="section-title" data-i18n="payments">Payments</div>
+      <div class="card" style="overflow-x:auto"><table id="dPay"></table></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Preview builds embed the encrypted blob here. The live site loads data/latest.enc.json instead. */
+/*EMBEDDED*/
+
+const I18N = {
+  en: {
+    biz:'Pasta Mia', bizSub:'Business Dashboard', enterPw:'Enter the family password to view the dashboard.', pwPh:'Password', enter:'Open',
+    wrongPw:'Wrong password. Please try again.', noData:'The sales data could not be loaded. Please try again later.', noCrypto:'Please open this page over a secure connection (https) or in a modern browser.',
+    curMonth:'Current month', refresh:'Refresh', todaySales:"Today's sales", salesToday:'Sales recorded today', viewDaily:'View daily sales',
+    curStock:'Current stock', itemsLeft:'Pieces remaining', stSold:'Stock sold', thisMonth:'This month', owing:'Customers owing', tapCust:'Tap to view customers',
+    unpaid:'Total unpaid', balanceAt:'Balances at end of', outstanding:'Outstanding credit', dailySales:'Daily sales', chartNote:'Pieces sold per day this month.', noDaily:'No sales recorded yet.',
+    overview:'Business overview', profit:'Business profit', perfect:'Perfect profit', save:'Save', saved:'Saved', phoneNote:'Saved on this device only. Parents will see a phone only on the device where it was typed.', totalSales:'Total sales', paid:'Paid', home:'Home', customers:'Customers', stock:'Stock', settings:'Settings',
+    search:'Search name or phone', searchPh:'Search name or phone', owingOnly:'Owing', allCust:'All', owes:'Owes', clear:'Paid', noPhone:'No phone yet',
+    balance:'Balance owed', purchases:'Purchases', payments:'Payments', phone:'Phone', date:'Date', qty:'Qty', price:'Unit price', total:'Total', amount:'Amount', method:'Method',
+    noPurch:'No purchases recorded.', noPay:'No payments recorded.', back:'Back',
+    opening:'Opening stock', added:'Stock added', sold:'Stock sold', current:'Current stock', queue:'Stock additions', status:'Status', qtyCol:'Quantity',
+    used:'Used', notUsed:'Not yet used', stockNote:'Figures follow your Excel Counter sheet.',
+    language:'Language', period:'Period', product:'Product', calendar:'Calendar', ethCal:'Ethiopian', exported:'Last updated', lock:'Lock dashboard', unit:'pieces'
+  },
+  am: {
+    biz:'ፓስታ ሚያ', bizSub:'የንግድ ዳሽቦርድ', enterPw:'ዳሽቦርዱን ለማየት የቤተሰብ የይለፍ ቃል ያስገቡ።', pwPh:'የይለፍ ቃል', enter:'ክፈት',
+    wrongPw:'የይለፍ ቃሉ ትክክል አይደለም። እባክዎ እንደገና ይሞክሩ።', noData:'የሽያጭ መረጃው ሊጫን አልቻለም። ቆይተው እንደገና ይሞክሩ።', noCrypto:'እባክዎ ይህን ገጽ በደህንነቱ የተጠበቀ ግንኙነት (https) ወይም ዘመናዊ አሳሽ ይክፈቱ።',
+    curMonth:'የአሁኑ ወር', refresh:'አድስ', todaySales:'የዛሬ ሽያጭ', salesToday:'ዛሬ የተመዘገበ ሽያጭ', viewDaily:'የዕለታዊ ሽያጭ ይመልከቱ',
+    curStock:'አሁን ያለ ክምችት', itemsLeft:'ቀሪ ቁራጭ', stSold:'የተሸጠ ክምችት', thisMonth:'በዚህ ወር', owing:'ዕዳ ያለባቸው ደንበኞች', tapCust:'ደንበኞችን ለማየት ይንኩ',
+    unpaid:'ያልተከፈለ ጠቅላላ', balanceAt:'ቀሪ ሂሳብ በ', outstanding:'ያልተከፈለ ብድር', dailySales:'ዕለታዊ ሽያጭ', chartNote:'በዚህ ወር በየቀኑ የተሸጡ ቁራጮች።', noDaily:'እስካሁን ሽያጭ አልተመዘገበም።',
+    overview:'የንግድ ማጠቃለያ', profit:'የንግድ ትርፍ', perfect:'ፍጹም ትርፍ', save:'አስቀምጥ', saved:'ተቀምጧል', phoneNote:'በዚህ መሣሪያ ላይ ብቻ ይቀመጣል። ወላጆች ስልኩን የሚያዩት በዚያ መሣሪያ ብቻ ነው።', totalSales:'ጠቅላላ ሽያጭ', paid:'የተከፈለ', home:'መነሻ', customers:'ደንበኞች', stock:'ክምችት', settings:'ቅንብሮች',
+    search:'ስም ወይም ስልክ ፈልግ', searchPh:'ስም ወይም ስልክ ፈልግ', owingOnly:'ዕዳ ያለባቸው', allCust:'ሁሉም', owes:'ዕዳ አለበት', clear:'ከፍሏል', noPhone:'ስልክ አልተመዘገበም',
+    balance:'ያለበት ዕዳ', purchases:'ግዢዎች', payments:'ክፍያዎች', phone:'ስልክ', date:'ቀን', qty:'ብዛት', price:'የአንድ ዋጋ', total:'ጠቅላላ', amount:'መጠን', method:'የክፍያ መንገድ',
+    noPurch:'ግዢ አልተመዘገበም።', noPay:'ክፍያ አልተመዘገበም።', back:'ተመለስ',
+    opening:'የመጀመሪያ ክምችት', added:'የተጨመረ ክምችት', sold:'የተሸጠ ክምችት', current:'አሁን ያለ ክምችት', queue:'የክምችት መግቢያዎች', status:'ሁኔታ', qtyCol:'ብዛት',
+    used:'ጥቅም ላይ ውሏል', notUsed:'ገና ጥቅም ላይ አልዋለም', stockNote:'ቁጥሮቹ ከኤክሴል Counter ሉህ ጋር ይጣጣማሉ።',
+    language:'ቋንቋ', period:'ወቅት', product:'ምርት', calendar:'የቀን አቆጣጠር', ethCal:'ኢትዮጵያዊ', exported:'መጨረሻ የተዘመነው', lock:'ዳሽቦርዱን ዝጋ', unit:'ቁራጭ'
+  }
+};
+const MONTHS = {
+  en: ['Meskerem','Tikimt','Hidar','Tahsas','Tir','Yekatit','Megabit','Miyazia','Ginbot','Sene','Hamle','Nehasse','Pagume'],
+  am: ['መስከረም','ጥቅምት','ህዳር','ታህሳስ','ጥር','የካቲት','መጋቢት','ሚያዝያ','ግንቦት','ሰኔ','ሐምሌ','ነሐሴ','ጳጉሜን']
+};
+
+let lang = 'en';
+try { lang = localStorage.getItem('lang') || 'en'; } catch (e) {}
+let DATA = null;
+let filter = 'owing';
+let openCustomer = null;
+
+const $ = id => document.getElementById(id);
+const t = k => (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k;
+const fmt = n => Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
+const etb = n => fmt(n) + ' ETB';
+const monthName = no => MONTHS[lang][(no || 1) - 1];
+
+/* ---- Ethiopian calendar (for "today") ---- */
+const ETH_EPOCH = 1724221; // JDN of 1 Meskerem, year 1
+function ethKey(date) {
+  const y = date.getFullYear(), m = date.getMonth() + 1, d = date.getDate();
+  const a = Math.floor((14 - m) / 12), yy = y + 4800 - a, mm = m + 12 * a - 3;
+  const jdn = d + Math.floor((153 * mm + 2) / 5) + 365 * yy + Math.floor(yy / 4) - Math.floor(yy / 100) + Math.floor(yy / 400) - 32045;
+  const n = jdn - ETH_EPOCH;
+  const year = Math.floor((4 * n + 3) / 1461) + 1;
+  const doy = n - ((year - 1) * 365 + Math.floor((year - 1) / 4));
+  return (doy % 30 + 1) + '-' + (Math.floor(doy / 30) + 1) + '-' + year;
+}
+
+/* ---- Decryption (AES-GCM, key from PBKDF2-SHA256) ---- */
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function getBlob() {
+  if (window.EMBEDDED_ENC) return window.EMBEDDED_ENC;
+  const r = await fetch('data/latest.enc.json', { cache: 'no-store' });
+  if (!r.ok) throw new Error('nodata');
+  return r.json();
+}
+async function decryptBlob(blob, pw) {
+  const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: b64(blob.salt), iterations: blob.iter, hash: 'SHA-256' },
+    km, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(blob.iv) }, key, b64(blob.ct));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+
+/* ---- Language ---- */
+function applyI18n() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+  document.querySelectorAll('[data-lang]').forEach(b => b.classList.toggle('on', b.dataset.lang === lang));
+  if (DATA) renderAll();
+}
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem('lang', l); } catch (e) {}
+  applyI18n();
+}
+document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+
+/* ---- Navigation ---- */
+function go(view) {
+  ['home', 'cust', 'stock', 'set'].forEach(v => { $({ home: 'v-home', cust: 'v-cust', stock: 'v-stock', set: 'v-set' }[v]).hidden = (v !== view); });
+  document.querySelectorAll('.tabbar button').forEach(b => b.classList.toggle('on', b.dataset.go === view));
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll('.tabbar button').forEach(b => b.addEventListener('click', () => go(b.dataset.go)));
+$('goDaily').addEventListener('click', () => $('dailyCard').scrollIntoView({ behavior: 'smooth' }));
+$('owingCard').addEventListener('click', () => { go('cust'); });
+$('lockBtn').addEventListener('click', () => { location.reload(); });
+$('refresh').addEventListener('click', () => renderAll());
+
+/* ---- Render ---- */
+function renderAll() {
+  if (!DATA) return;
+  renderHome(); renderCustomers(); renderStock(); renderSettings();
+}
+function renderHome() {
+  const m = DATA.meta, T = DATA.totals;
+  populateMonthPicker();
+  $('pubLabel').textContent = t('exported') + ': ' + (m.exported || '—');
+  const today = ethKey(new Date());
+  const row = DATA.daily.find(d => d.date === today);
+  $('todayAmt').textContent = etb(row ? row.amount : 0);
+  $('stCur').textContent = fmt(DATA.stock.current);
+  $('stSold').textContent = fmt(DATA.stock.sold);
+  $('owingN').textContent = fmt(DATA.customers.filter(c => c.balance > 0).length);
+  $('unpaidAmt').textContent = etb(T.unpaid);
+  $('profitAmt').textContent = etb(T.perfect_profit);
+  $('salesAmt').textContent = etb(T.sales);
+  $('paidLbl').textContent = t('paid') + ': ' + etb(T.paid);
+  $('chartSub').textContent = monthName(m.month_no) + ' ' + m.year + ' · ' + t('ethCal');
+
+  const bars = $('bars'); bars.innerHTML = '';
+  if (!DATA.daily.length) { bars.innerHTML = ''; $('chartSub').textContent += ' — ' + t('noDaily'); return; }
+  const max = Math.max(...DATA.daily.map(d => d.qty), 1);
+  DATA.daily.forEach(d => {
+    const col = document.createElement('div');
+    col.className = 'bar' + (d.date === today ? ' today' : '');
+    const b = document.createElement('b'); b.textContent = fmt(d.qty);
+    const i = document.createElement('i'); i.style.height = Math.max(2, (d.qty / max) * 100) + '%';
+    i.title = d.date + ': ' + fmt(d.qty) + ' ' + t('unit');
+    const s = document.createElement('span'); s.textContent = parseInt(d.date, 10);
+    col.append(b, i, s);
+    bars.appendChild(col);
+  });
+}
+function getPhone(c) {
+  try { const v = localStorage.getItem('phone:' + c.name); if (v !== null) return v; } catch (e) {}
+  return c.phone || '';
+}
+function setPhone(c, v) {
+  try { localStorage.setItem('phone:' + c.name, v.trim()); } catch (e) {}
+}
+function initials(name) { return (name || '?').trim().charAt(0).toUpperCase(); }
+function renderCustomers() {
+  $('custNote').textContent = t('balanceAt') + ' ' + monthName(DATA.meta.month_no) + ' ' + DATA.meta.year;
+  const q = ($('q').value || '').trim().toLowerCase();
+  const list = DATA.customers
+    .filter(c => (filter === 'all' || c.balance > 0))
+    .filter(c => !q || c.name.toLowerCase().includes(q) || getPhone(c).includes(q))
+    .sort((a, b) => (b.balance || 0) - (a.balance || 0) || a.name.localeCompare(b.name));
+  const box = $('custList'); box.innerHTML = '';
+  if (!list.length) { const e = document.createElement('div'); e.className = 'empty'; e.textContent = '—'; box.appendChild(e); }
+  list.forEach(c => {
+    const btn = document.createElement('button'); btn.className = 'row'; btn.type = 'button';
+    const left = document.createElement('div'); left.style.cssText = 'display:flex;gap:12px;align-items:center;min-width:0';
+    const av = document.createElement('div'); av.className = 'avatar'; av.textContent = initials(c.name);
+    const txt = document.createElement('div'); txt.style.minWidth = '0';
+    const nm = document.createElement('div'); nm.className = 'name'; nm.textContent = c.name;
+    const ph = document.createElement('div'); ph.className = 'label'; ph.textContent = getPhone(c) || t('noPhone');
+    txt.append(nm, ph); left.append(av, txt);
+    const right = document.createElement('div'); right.className = 'right';
+    const amt = document.createElement('div'); amt.style.fontWeight = '700';
+    const pill = document.createElement('span');
+    if (c.balance > 0) { amt.textContent = etb(c.balance); amt.className = 'due'; pill.className = 'pill a'; pill.textContent = t('owes'); }
+    else { amt.textContent = '0 ETB'; pill.className = 'pill g'; pill.textContent = t('clear'); }
+    right.append(amt, document.createElement('br'), pill);
+    btn.append(left, right);
+    btn.addEventListener('click', () => openDetail(c));
+    box.appendChild(btn);
+  });
+}
+function cell(tr, text, cls) { const td = document.createElement('td'); if (cls) td.className = cls; td.textContent = text; tr.appendChild(td); }
+function headRow(table, labels) {
+  table.innerHTML = '';
+  const thead = document.createElement('thead'); const tr = document.createElement('tr');
+  labels.forEach(([l, cls]) => { const th = document.createElement('th'); th.textContent = l; if (cls) th.className = cls; tr.appendChild(th); });
+  thead.appendChild(tr); table.appendChild(thead);
+  return document.createElement('tbody');
+}
+function openDetail(c) {
+  openCustomer = c;
+  $('dName').textContent = c.name;
+  $('phoneIn').value = getPhone(c); $('phoneMsg').textContent = t('phoneNote');
+  $('dBal').textContent = etb(c.balance || 0);
+  $('dBal').className = 'big ' + ((c.balance || 0) > 0 ? 'due' : 'ok');
+
+  const pt = $('dPur'); const tb = headRow(pt, [[t('date')], [t('qty'), 'num'], [t('price'), 'num'], [t('total'), 'num']]);
+  let qSum = 0, tSum = 0;
+  c.purchases.forEach(p => { const tr = document.createElement('tr'); cell(tr, p.date); cell(tr, fmt(p.qty), 'num'); cell(tr, fmt(p.price), 'num'); cell(tr, fmt(p.total), 'num'); tb.appendChild(tr); qSum += p.qty; tSum += p.total; });
+  pt.appendChild(tb);
+  if (!c.purchases.length) { const e = document.createElement('div'); e.className = 'empty'; e.textContent = t('noPurch'); pt.replaceWith(e); }
+  else { const tf = document.createElement('tfoot'); const tr = document.createElement('tr'); cell(tr, ''); cell(tr, fmt(qSum), 'num'); cell(tr, ''); cell(tr, fmt(tSum), 'num'); tf.appendChild(tr); pt.appendChild(tf); }
+
+  const py = $('dPay'); const tb2 = headRow(py, [[t('date')], [t('amount'), 'num'], [t('method')]]);
+  let paySum = 0;
+  c.payments.forEach(p => { const tr = document.createElement('tr'); cell(tr, p.date); cell(tr, fmt(p.amount), 'num'); cell(tr, p.method || '—'); tb2.appendChild(tr); paySum += p.amount; });
+  py.appendChild(tb2);
+  if (!c.payments.length) { const e = document.createElement('div'); e.className = 'empty'; e.textContent = t('noPay'); py.replaceWith(e); }
+  else { const tf = document.createElement('tfoot'); const tr = document.createElement('tr'); cell(tr, ''); cell(tr, fmt(paySum), 'num'); cell(tr, ''); tf.appendChild(tr); py.appendChild(tf); }
+
+  $('detail').hidden = false; $('detail').scrollTop = 0;
+}
+function closeDetail() { $('detail').hidden = true; }
+$('phoneSave').addEventListener('click', () => {
+  if (!openCustomer) return;
+  setPhone(openCustomer, $('phoneIn').value);
+  $('phoneMsg').textContent = t('saved');
+  renderCustomers();
+});
+$('back').addEventListener('click', closeDetail);
+
+function renderStock() {
+  const S = DATA.stock;
+  $('sOpen').textContent = fmt(S.opening); $('sAdded').textContent = fmt(S.added);
+  $('sSold').textContent = fmt(S.sold); $('sCur').textContent = fmt(S.current);
+  const tb = headRow($('queueTbl'), [[t('date')], [t('qtyCol'), 'num'], [t('price'), 'num'], [t('status')]]);
+  S.queue.forEach(r => {
+    const tr = document.createElement('tr'); cell(tr, r.date || '—'); cell(tr, fmt(r.qty), 'num'); cell(tr, fmt(r.price), 'num');
+    const td = document.createElement('td'); const p = document.createElement('span');
+    const used = (r.status || '').toUpperCase() === 'USED';
+    p.className = 'pill ' + (used ? 'g' : 'a'); p.textContent = used ? t('used') : t('notUsed');
+    td.appendChild(p); tr.appendChild(td); tb.appendChild(tr);
+  });
+  $('queueTbl').appendChild(tb);
+}
+function renderSettings() {
+  const m = DATA.meta;
+  $('setPeriod').textContent = monthName(m.month_no) + ' ' + m.year;
+  $('setProduct').textContent = m.product || '—';
+  $('setExp').textContent = m.exported || '—';
+}
+$('q').addEventListener('input', renderCustomers);
+document.querySelectorAll('#filt button').forEach(b => b.addEventListener('click', () => {
+  filter = b.dataset.f;
+  document.querySelectorAll('#filt button').forEach(x => x.classList.toggle('on', x === b));
+  renderCustomers();
+}));
+
+/* ---- Months (bundle may hold several months) ---- */
+let BUNDLE_MONTHS = [];
+function normalizeBundle(b) {
+  let list = null;
+  if (b && Array.isArray(b.months)) list = b.months;
+  else if (b && b.meta && b.customers) list = [b];
+  if (!list || !list.length) throw new Error('bad-bundle');
+  return list.slice().sort((x, y) => (x.meta.year - y.meta.year) || (x.meta.month_no - y.meta.month_no));
+}
+function populateMonthPicker() {
+  const sel = $('monthPick');
+  if (!sel || !BUNDLE_MONTHS.length) return;
+  sel.innerHTML = '';
+  BUNDLE_MONTHS.forEach((m, i) => {
+    const o = document.createElement('option');
+    o.value = String(i); o.textContent = monthName(m.meta.month_no) + ' ' + m.meta.year;
+    sel.appendChild(o);
+  });
+  sel.value = String(BUNDLE_MONTHS.indexOf(DATA));
+}
+$('monthPick').addEventListener('change', e => {
+  DATA = BUNDLE_MONTHS[Number(e.target.value)];
+  closeDetail();
+  renderAll();
+});
+
+/* ---- Gate ---- */
+$('pwform').addEventListener('submit', async e => {
+  e.preventDefault();
+  const pw = $('pw').value; const btn = $('openBtn'); const err = $('err');
+  err.textContent = ''; btn.disabled = true;
+  if (!window.crypto || !crypto.subtle) { err.textContent = t('noCrypto'); btn.disabled = false; return; }
+  let blob;
+  try { blob = await getBlob(); } catch (x) { err.textContent = t('noData'); btn.disabled = false; return; }
+  try {
+    const bundle = await decryptBlob(blob, pw);
+    BUNDLE_MONTHS = normalizeBundle(bundle);
+    DATA = BUNDLE_MONTHS[BUNDLE_MONTHS.length - 1];
+    $('gate').hidden = true; $('app').hidden = false;
+    go('home'); applyI18n(); renderAll();
+  } catch (x) {
+    err.textContent = t('wrongPw');
+    $('pw').select();
+  }
+  btn.disabled = false;
+});
+
+applyI18n();
+</script>
+</body>
+</html>
