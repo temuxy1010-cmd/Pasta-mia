@@ -218,9 +218,9 @@ tfoot td{font-weight:700;border-bottom:0}
         <div class="big" id="dBal"></div>
       </div>
       <div class="section-title" data-i18n="purchases">Purchases</div>
-      <div class="card" style="overflow-x:auto"><table id="dPur"></table></div>
+      <div class="card" style="overflow-x:auto"><table id="dPur"></table><div id="dPurNone" class="empty" hidden></div></div>
       <div class="section-title" data-i18n="payments">Payments</div>
-      <div class="card" style="overflow-x:auto"><table id="dPay"></table></div>
+      <div class="card" style="overflow-x:auto"><table id="dPay"></table><div id="dPayNone" class="empty" hidden></div></div>
     </div>
   </div>
 </div>
@@ -422,15 +422,19 @@ function openDetail(c) {
   let qSum = 0, tSum = 0;
   c.purchases.forEach(p => { const tr = document.createElement('tr'); cell(tr, p.date); cell(tr, fmt(p.qty), 'num'); cell(tr, fmt(p.price), 'num'); cell(tr, fmt(p.total), 'num'); tb.appendChild(tr); qSum += p.qty; tSum += p.total; });
   pt.appendChild(tb);
-  if (!c.purchases.length) { const e = document.createElement('div'); e.className = 'empty'; e.textContent = t('noPurch'); pt.replaceWith(e); }
-  else { const tf = document.createElement('tfoot'); const tr = document.createElement('tr'); cell(tr, ''); cell(tr, fmt(qSum), 'num'); cell(tr, ''); cell(tr, fmt(tSum), 'num'); tf.appendChild(tr); pt.appendChild(tf); }
+  pt.hidden = !c.purchases.length;
+  $('dPurNone').hidden = c.purchases.length > 0;
+  $('dPurNone').textContent = t('noPurch');
+  if (c.purchases.length) { const tf = document.createElement('tfoot'); const tr = document.createElement('tr'); cell(tr, ''); cell(tr, fmt(qSum), 'num'); cell(tr, ''); cell(tr, fmt(tSum), 'num'); tf.appendChild(tr); pt.appendChild(tf); }
 
   const py = $('dPay'); const tb2 = headRow(py, [[t('date')], [t('amount'), 'num'], [t('method')]]);
   let paySum = 0;
   c.payments.forEach(p => { const tr = document.createElement('tr'); cell(tr, p.date); cell(tr, fmt(p.amount), 'num'); cell(tr, p.method || '—'); tb2.appendChild(tr); paySum += p.amount; });
   py.appendChild(tb2);
-  if (!c.payments.length) { const e = document.createElement('div'); e.className = 'empty'; e.textContent = t('noPay'); py.replaceWith(e); }
-  else { const tf = document.createElement('tfoot'); const tr = document.createElement('tr'); cell(tr, ''); cell(tr, fmt(paySum), 'num'); cell(tr, ''); tf.appendChild(tr); py.appendChild(tf); }
+  py.hidden = !c.payments.length;
+  $('dPayNone').hidden = c.payments.length > 0;
+  $('dPayNone').textContent = t('noPay');
+  if (c.payments.length) { const tf = document.createElement('tfoot'); const tr = document.createElement('tr'); cell(tr, ''); cell(tr, fmt(paySum), 'num'); cell(tr, ''); tf.appendChild(tr); py.appendChild(tf); }
 
   $('detail').hidden = false; $('detail').scrollTop = 0;
 }
