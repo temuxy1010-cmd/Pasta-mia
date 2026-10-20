@@ -141,7 +141,13 @@ tfoot td{font-weight:700;border-bottom:0}
       <div class="section-title" data-i18n="overview">Business overview</div>
       <div class="card list">
         <div class="row" style="cursor:default">
-          <div><div class="label" data-i18n="perfect">Perfect profit</div><div class="big" style="font-size:22px" id="profitAmt">—</div></div>
+          <div style="width:100%"><div class="label" data-i18n="perfect">Perfect profit</div><div class="big" style="font-size:22px" id="profitAmt">—</div>
+            <form id="profitForm" hidden style="margin-top:8px;display:flex;gap:8px">
+              <input id="ownerPw" type="password" placeholder="Family password" autocomplete="off" style="flex:1;font:inherit;padding:10px;border-radius:10px;border:1px solid var(--line)">
+              <button class="btn small" type="submit">Show</button>
+            </form>
+            <div class="label" id="profitErr" style="color:var(--red)"></div>
+          </div>
         </div>
         <div class="row" style="cursor:default">
           <div><div class="label" data-i18n="totalSales">Total sales</div><div class="big" style="font-size:22px" id="salesAmt">—</div><div class="label" id="paidLbl"></div></div>
@@ -337,6 +343,34 @@ function renderAll() {
   if (!DATA) return;
   renderHome(); renderCustomers(); renderStock(); renderSettings();
 }
+/* ---- Perfect profit: locked behind a second (owner) password ---- */
+let PROFIT_ENC = null;   // encrypted profit map from the bundle (null = old file, shown plain)
+let OWNER_PROFIT = null; // decrypted map after the owner password is entered (kept in memory only)
+const profitKey = m => m.meta.year + '-' + m.meta.month_no;
+function renderProfit() {
+  const el = $('profitAmt'), form = $('profitForm');
+  if (!PROFIT_ENC) { el.textContent = etb(DATA.totals.perfect_profit); form.hidden = true; return; }
+  if (OWNER_PROFIT) {
+    const v = OWNER_PROFIT[profitKey(DATA)];
+    el.textContent = (v === undefined || v === null) ? '—' : etb(v);
+    form.hidden = true; $('profitErr').textContent = ''; return;
+  }
+  el.textContent = '••••••';
+  form.hidden = false;
+}
+$('profitForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const pw = $('ownerPw').value;
+  try {
+    OWNER_PROFIT = await decryptBlob(PROFIT_ENC, pw);
+    $('ownerPw').value = '';
+    renderProfit();
+  } catch (x) {
+    $('profitErr').textContent = 'Wrong password';
+    $('ownerPw').select();
+  }
+});
+
 function renderHome() {
   const m = DATA.meta, T = DATA.totals;
   populateMonthPicker();
@@ -348,7 +382,7 @@ function renderHome() {
   $('stSold').textContent = fmt(DATA.stock.sold);
   $('owingN').textContent = fmt(DATA.customers.filter(c => c.balance > 0).length);
   $('unpaidAmt').textContent = etb(T.unpaid);
-  $('profitAmt').textContent = etb(T.perfect_profit);
+  renderProfit();
   $('salesAmt').textContent = etb(T.sales);
   $('paidLbl').textContent = t('paid') + ': ' + etb(T.paid);
   $('chartSub').textContent = monthName(m.month_no) + ' ' + m.year + ' · ' + t('ethCal');
@@ -511,6 +545,8 @@ $('pwform').addEventListener('submit', async e => {
   try {
     const bundle = await decryptBlob(blob, pw);
     BUNDLE_MONTHS = normalizeBundle(bundle);
+    PROFIT_ENC = (bundle && bundle.profit_enc) || null;
+    OWNER_PROFIT = null;
     DATA = BUNDLE_MONTHS[BUNDLE_MONTHS.length - 1];
     $('gate').hidden = true; $('app').hidden = false;
     go('home'); applyI18n(); renderAll();
