@@ -213,6 +213,19 @@ tfoot td{font-weight:700;border-bottom:0}
       <span data-i18n="settings">Settings</span></button>
   </nav>
 
+  <!-- DAY DETAIL (opened from a bar in the Daily sales chart) -->
+  <div id="dayDetail" class="overlay" hidden>
+    <div class="wrap">
+      <div class="hdr"><button class="btn small" id="dayBack" type="button">‹ <span data-i18n="back">Back</span></button></div>
+      <div class="card">
+        <div class="big" style="font-size:24px" id="dayTitle"></div>
+        <div class="note" id="daySum"></div>
+      </div>
+      <div class="section-title" data-i18n="purchases">Purchases</div>
+      <div class="card" style="overflow-x:auto"><table id="dayTbl"></table><div id="dayNone" class="empty" hidden></div></div>
+    </div>
+  </div>
+
   <!-- CUSTOMER DETAIL -->
   <div id="detail" class="overlay" hidden>
     <div class="wrap">
@@ -398,6 +411,8 @@ function renderHome() {
     i.title = d.date + ': ' + fmt(d.qty) + ' ' + t('unit');
     const s = document.createElement('span'); s.textContent = parseInt(d.date, 10);
     col.append(b, i, s);
+    col.style.cursor = 'pointer';
+    col.addEventListener('click', () => openDay(d));
     bars.appendChild(col);
   });
 }
@@ -473,6 +488,24 @@ function openDetail(c) {
   $('detail').hidden = false; $('detail').scrollTop = 0;
 }
 function closeDetail() { $('detail').hidden = true; }
+
+/* ---- Day detail: opened from a bar ---- */
+function openDay(d) {
+  $('dayTitle').textContent = d.date;
+  $('daySum').textContent = fmt(d.qty) + ' ' + t('unit') + ' · ' + etb(d.amount) + ' · ' + t('paid') + ': ' + etb(d.paid);
+  const tb = headRow($('dayTbl'), [['Name'], [t('qty'), 'num'], [t('price'), 'num'], [t('total'), 'num'], [t('paid'), 'num'], [t('method')]]);
+  const rows = d.rows || [];
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    cell(tr, r.name); cell(tr, fmt(r.qty), 'num'); cell(tr, fmt(r.price), 'num'); cell(tr, fmt(r.total), 'num'); cell(tr, fmt(r.paid), 'num'); cell(tr, r.method || '—');
+    tb.appendChild(tr);
+  });
+  $('dayTbl').appendChild(tb);
+  $('dayNone').hidden = rows.length > 0;
+  $('dayNone').textContent = t('noPurch');
+  $('dayDetail').hidden = false; $('dayDetail').scrollTop = 0;
+}
+$('dayBack').addEventListener('click', () => { $('dayDetail').hidden = true; });
 $('phoneSave').addEventListener('click', () => {
   if (!openCustomer) return;
   setPhone(openCustomer, $('phoneIn').value);
